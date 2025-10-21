@@ -1,36 +1,119 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f5f5f5;
+    }
+    .login-container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 300px;
+      text-align: center;
+    }
+    input[type="text"], input[type="password"] {
+      width: 90%;
+      padding: 8px;
+      margin: 10px 0;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    input[type="submit"], button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button {
+      display: none; /* Hidden initially */
+    }
+    label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 14px;
+    }
+  </style>
 </head>
-
 <body>
-	<!-- the entire body must be written by student -->
-	<h1>MyBookList</h1>
-<div class="form-group">
-    <input type="text" id="title" placeholder="Book Title" required>
-    <input type="text" id="author" placeholder="Author" required>
-    <input type="text" id="isbn" placeholder="ISBN" required>
-    <button id="submit">Add Book</button>
-</div>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>ISBN#</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody id="book-list">
-        <!-- Book rows will be added here -->
-    </tbody>
-</table>
-    <script type="text/javascript" src="./script.js">
-</script>
+  <div class="login-container">
+    <h1>Login Form</h1>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Username">
+      <input type="password" id="password" placeholder="Password">
+      <label>
+        <input type="checkbox" id="checkbox"> Remember me.
+      </label>
+      <input type="submit" id="submit" value="Submit">
+    </form>
+    <button id="existing">Login as existing user</button>
+  </div>
 
+  <script>
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const rememberCheckbox = document.getElementById('checkbox');
+    const submitBtn = document.getElementById('submit');
+    const existingBtn = document.getElementById('existing');
+
+    // Check if credentials are saved
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedUsername = localStorage.getItem('username');
+      const savedPassword = localStorage.getItem('password');
+      if (savedUsername && savedPassword) {
+        existingBtn.style.display = 'block';
+      }
+    });
+
+    // Form submission
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      if (!username || !password) {
+        alert('Please enter username and password');
+        return;
+      }
+
+      alert(`Logged in as ${username}`);
+
+      if (rememberCheckbox.checked) {
+        localStorage.setItem('username', username);
+        localStorage.setItem('password', password);
+        existingBtn.style.display = 'block';
+      } else {
+        localStorage.removeItem('username');
+        localStorage.removeItem('password');
+        existingBtn.style.display = 'none';
+      }
+
+      // Clear input fields
+      usernameInput.value = '';
+      passwordInput.value = '';
+      rememberCheckbox.checked = false;
+    });
+
+    // Login as existing user
+    existingBtn.addEventListener('click', () => {
+      const savedUsername = localStorage.getItem('username');
+      if (savedUsername) {
+        alert(`Logged in as ${savedUsername}`);
+      }
+    });
+  </script>
 </body>
-
 </html>
