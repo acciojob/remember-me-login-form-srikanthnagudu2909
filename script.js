@@ -1,56 +1,39 @@
 (() => {
-    // Get elements
-    const usernameInput = document.getElementById('username');
-    const passwordInput = document.getElementById('password');
-    const checkbox = document.getElementById('checkbox');
+    const titleInput = document.getElementById('title');
+    const authorInput = document.getElementById('author');
+    const isbnInput = document.getElementById('isbn');
     const submitBtn = document.getElementById('submit');
-    const existingBtn = document.getElementById('existing');
-    const loginForm = document.getElementById('loginForm');
+    const bookList = document.getElementById('book-list');
 
-    // Check if credentials exist in localStorage
-    const savedUsername = localStorage.getItem('username');
-    const savedPassword = localStorage.getItem('password');
+    // Handle book addition
+    submitBtn.addEventListener('click', () => {
+        const title = titleInput.value;
+        const author = authorInput.value;
+        const isbn = isbnInput.value;
 
-    if (savedUsername && savedPassword) {
-        existingBtn.style.display = 'block';
-    }
+        if (title && author && isbn) {
+            // Create a new table row
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${title}</td>
+                <td>${author}</td>
+                <td>${isbn}</td>
+                <td><button class="delete-btn">Delete</button></td>
+            `;
+            bookList.appendChild(row);
 
-    // Handle form submission
-    loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const username = usernameInput.value;
-        const password = passwordInput.value;
+            // Clear input fields
+            titleInput.value = '';
+            authorInput.value = '';
+            isbnInput.value = '';
 
-        alert(`Logged in as ${username}`);
-
-        if (checkbox.checked) {
-            // Save credentials
-            localStorage.setItem('username', username);
-            localStorage.setItem('password', password);
-            existingBtn.style.display = 'block';
+            // Add delete functionality
+            const deleteBtn = row.querySelector('.delete-btn');
+            deleteBtn.addEventListener('click', () => {
+                bookList.removeChild(row);
+            });
         } else {
-            // Remove credentials if exist
-            localStorage.removeItem('username');
-            localStorage.removeItem('password');
-            existingBtn.style.display = 'none';
-        }
-
-        // Clear inputs
-        usernameInput.value = '';
-        passwordInput.value = '';
-        checkbox.checked = false;
-    });
-
-    // Handle existing user login
-    existingBtn.addEventListener('click', () => {
-        const savedUsername = localStorage.getItem('username');
-        const savedPassword = localStorage.getItem('password');
-
-        if (savedUsername && savedPassword) {
-            alert(`Logged in as ${savedUsername}`);
-            // Optional: prefill inputs
-            usernameInput.value = savedUsername;
-            passwordInput.value = savedPassword;
+            alert('Please fill in all fields');
         }
     });
 })();
